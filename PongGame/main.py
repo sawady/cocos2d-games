@@ -37,11 +37,11 @@ class KeyDisplay(Layer):
         
         self.player_velocity = 200
         
-        self.player1 = cocos.sprite.Sprite('paleta.png')
+        self.player1 = cocos.sprite.Sprite('assets/images/paleta.png')
         self.player1.position = 20, 240
         self.player1.velocity = (0, 0)
         
-        self.player2 = cocos.sprite.Sprite('paleta.png')
+        self.player2 = cocos.sprite.Sprite('assets/images/paleta.png')
         self.player2.position = 620, 240
         self.player2.velocity = (0, 0)
         
@@ -51,7 +51,7 @@ class KeyDisplay(Layer):
         self.player1.do(actions.BoundedMove(640, 480))
         self.player2.do(actions.BoundedMove(640, 480))
         
-        self.ball = cocos.sprite.Sprite('bola.png', position=(320, 240))
+        self.ball = cocos.sprite.Sprite('assets/images/bola.png', position=(320, 240))
         self.ball_velocity = 10
         self.add(self.ball)
 

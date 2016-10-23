@@ -10,9 +10,9 @@ class KeyDisplay(cocos.layer.Layer):
 
     def __init__(self):
 
-        super( KeyDisplay, self ).__init__()
+        super(KeyDisplay, self).__init__()
 
-        self.text = cocos.text.Label("", x=100, y=280 )
+        self.text = cocos.text.Label("", x=100, y=280)
 
         # To keep track of which keys are pressed:
         self.keys_pressed = set()
@@ -21,7 +21,7 @@ class KeyDisplay(cocos.layer.Layer):
 
     def update_text(self):
         key_names = [pyglet.window.key.symbol_string (k) for k in self.keys_pressed]
-        text = 'Keys: '+','.join (key_names)
+        text = 'Keys: ' + ','.join (key_names)
         # Update self.text
         self.text.element.text = text
         
@@ -50,15 +50,15 @@ class KeyDisplay(cocos.layer.Layer):
         
 class MouseDisplay(cocos.layer.Layer):
 
-    is_event_handler = True     #: enable director.window events
+    is_event_handler = True  # : enable director.window events
 
     def __init__(self):
-        super( MouseDisplay, self ).__init__()
+        super(MouseDisplay, self).__init__()
 
         self.posx = 100
         self.posy = 240
-        self.text = cocos.text.Label('No mouse events yet', font_size=18, x=self.posx, y=self.posy )
-        self.add( self.text )
+        self.text = cocos.text.Label('No mouse events yet', font_size=18, x=self.posx, y=self.posy)
+        self.add(self.text)
 
     def update_text (self, x, y):
         text = 'Mouse @ %d,%d' % (x, y)
@@ -96,8 +96,8 @@ class MouseDisplay(cocos.layer.Layer):
            (values like 'SHIFT', 'OPTION', 'ALT')
         """
         self.posx, self.posy = director.get_virtual_coordinates (x, y)
-        self.update_text (x,y)
+        self.update_text (x, y)
         
 director.init(resizable=True)
 # Run a scene with our event displayers:
-director.run( cocos.scene.Scene( KeyDisplay(), MouseDisplay() ) )
+director.run(cocos.scene.Scene(KeyDisplay(), MouseDisplay()))
