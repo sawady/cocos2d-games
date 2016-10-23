@@ -2,11 +2,12 @@ import cocos
 from cocos.director import director
 import cocos.actions as actions
 from cocos.layer import Layer, ColorLayer
-# from cocos.rect import Rect
+from cocos.sprite import Sprite
+from cocos.rect import Rect
 from cocos.draw import Line
-from pyglet.window.key import KeyStateHandler
+# from pyglet.window.key import KeyStateHandler
 from pyglet.window import key
-from pyglet.window import Screen
+# from pyglet.window import Screen
 
 # from cocos.actions import *
 
@@ -37,11 +38,11 @@ class KeyDisplay(Layer):
         
         self.player_velocity = 200
         
-        self.player1 = cocos.sprite.Sprite('assets/images/paleta.png')
+        self.player1 = Sprite('assets/images/paleta.png')
         self.player1.position = 20, 240
         self.player1.velocity = (0, 0)
         
-        self.player2 = cocos.sprite.Sprite('assets/images/paleta.png')
+        self.player2 = Sprite('assets/images/paleta.png')
         self.player2.position = 620, 240
         self.player2.velocity = (0, 0)
         
@@ -51,10 +52,13 @@ class KeyDisplay(Layer):
         self.player1.do(actions.BoundedMove(640, 480))
         self.player2.do(actions.BoundedMove(640, 480))
         
-        self.ball = cocos.sprite.Sprite('assets/images/bola.png', position=(320, 240))
-        self.ball_velocity = 10
+        self.ball = Sprite('assets/images/bola.png', position=(320, 240))
+        self.ball_velocity = 200
+        self.ball.velocity = (self.ball_velocity, self.ball_velocity)
         self.add(self.ball)
 
+        self.ball.do(BallMove(self.player1, self.player2, 640, 480))
+        
     def on_key_press(self, k, modifiers):
         if k is key.UP:
             self.player1.velocity = (0, self.player_velocity)
@@ -67,10 +71,12 @@ class KeyDisplay(Layer):
 
     def on_key_release(self, k, modifiers):
         if k is key.UP or k is key.DOWN:
+            self.player1.do(actions.Twirl(amplitude=0.1, duration=0.5))
             self.player1.velocity = (0, 0)
         if k is key.W or k is key.S:
+            self.player2.do(actions.Twirl(amplitude=0.1, duration=0.5))
             self.player2.velocity = (0, 0)
-        
+            
     def on_exit(self):
         "Called every time just before the node exits the stage."
         super(KeyDisplay, self).on_exit()
@@ -78,6 +84,33 @@ class KeyDisplay(Layer):
         
     def update_text(self, text, s):
         text.element.text = s
+
+class BallMove(actions.Move):
+    def init(self, p1, p2, width, height):
+        self.width, self.height = width, height
+        self.p1, self.p2 = p1, p2
+
+    def step(self, dt):
+        super(BallMove, self).step(dt)
+        x, y = self.target.position
+        w, h = self.target.width, self.target.height
+        
+        target_rect = self.target.get_rect()
+        
+        if x > self.width - w / 2:
+            x = self.width - w / 2
+            self.target.velocity = (self.target.velocity[0] * -1, self.target.velocity[1])
+        elif x < w / 2:
+            x = w / 2
+            self.target.velocity = (self.target.velocity[0] * -1, self.target.velocity[1])
+            
+        if y > self.height - h / 2:
+            y = self.height - h / 2
+            self.target.velocity = (self.target.velocity[0], self.target.velocity[1] * -1)
+        elif y < h / 2:
+            y = h / 2
+            self.target.velocity = (self.target.velocity[0], self.target.velocity[1] * -1)
+        self.target.position = (x, y)
 
 # TODO: DO MANU SCENE
 
